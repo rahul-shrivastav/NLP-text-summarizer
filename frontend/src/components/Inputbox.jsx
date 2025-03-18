@@ -3,9 +3,11 @@
 import React from 'react'
 import { IoMdSend } from "react-icons/io";
 
-const Inputbox = ({qid,extractedtext}) => {
+const Inputbox = ({ qid, extractedtext, setallchat }) => {
 
   const sendquerry = async () =>{
+    setallchat((prev) => [...prev, document.getElementById('inputq').value]);
+
 
   }
   return (
