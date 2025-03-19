@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-screen h-screen bg-gray-100 ">
+      <div className="w-screen h-screen bg-gray-200 ">
         <Navbar setfilename={setfilename} setqid={setqid} setextractedtext={setextractedtext} filename={filename} />
         <Conversations allchat={allchat} />
         <Inputbox qid={qid} extractedtext={extractedtext} setallchat={setallchat} />
