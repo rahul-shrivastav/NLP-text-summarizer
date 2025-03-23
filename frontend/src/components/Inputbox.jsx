@@ -15,7 +15,7 @@ const Inputbox = ({ qid, extractedtext, setallchat }) => {
 
   }
   return (
-    <div className='w-full absolute m-auto bottom-10 bg-transparent '>
+    <div className='w-full   bg-transparent mb-8 '>
       <div className="w-[60%] max-[700px]:w-[90%]  m-auto shadow-xl bg-white border-t border-r border-l border-slate-200 flex p-2 rounded-md">
         <form action="" onSubmit={handleSubmit} className='w-full h-full flex'>
           <input id='inputq' className=' w-full outline-none p-1 text-black' placeholder='Send Message ...' type="text" />
