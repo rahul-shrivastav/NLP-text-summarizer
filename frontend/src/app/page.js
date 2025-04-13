@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import Inputbox from '../components/Inputbox'
 import Conversations from '../components/Conversations'
 import { useState } from 'react';
+import Inputpanel from '@/components/Inputpanel';
 
 
 
@@ -14,11 +15,23 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-vh h-svh overflow-clip bg-gray-100 flex flex-col items-center justify-between     ">
-        <Navbar setfilename={setfilename} setqid={setqid} setextractedtext={setextractedtext} filename={filename} />
-        <Conversations allchat={allchat} />
-        <Inputbox qid={qid} extractedtext={extractedtext} setallchat={setallchat} />
+      <div className=" w-vh h-svh flex flex-col bg-gray-200     ">
+        <div className='border h-[100px] text-white flex items-center justify-center'>
+          <p className="text-5xl font-semibold bg-gradient-to-r from-blue-400 to-blue-800 bg-clip-text text-transparent">
+            AI Text Summarizer
+          </p>
+        </div>
+
+        <div className=' border  flex-1 flex items-center justify-center'>
+          <Inputpanel />
+        </div>
+
+
       </div>
+
+
+
+
     </>
   )
 }

@@ -5,11 +5,8 @@ import { FaPlusCircle } from "react-icons/fa";
 import { BsFiletypePdf } from "react-icons/bs";
 import logo from '../../public/logo.png';
 
-const Navbar = ({setextractedtext,setfilename,setqid,filename}) => {
+const Navbar = () => {
 
-	const handleButtonClick = async () => {
-
-	};
 			
 	return (
 		<div className=' w-screen max-sm:shadow-lg max-sm:justify-center h-16 max-sm:h-10 bg-white  shadow-sm flex items-center justify-between '>

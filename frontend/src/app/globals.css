@@ -48,3 +48,17 @@ body {
     /* Darker on hover */
   }
 }
+textarea::-webkit-scrollbar {
+  width: 2px;
+  /* Change this for width */
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: #b1caf3;
+  /* Tailwind's blue-500 */
+  border-radius: 4px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
