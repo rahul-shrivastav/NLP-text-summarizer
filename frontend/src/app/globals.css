@@ -62,3 +62,23 @@ textarea::-webkit-scrollbar-thumb {
 textarea::-webkit-scrollbar-track {
   background: transparent;
 }
+::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+  /* for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #b1caf3;
+  /* soft blue */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #90b4f0;
+  /* slightly darker on hover */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
