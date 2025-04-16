@@ -4,8 +4,23 @@ import { FaCopy } from "react-icons/fa";
 
 const Inputpanel = ({ mode, setmode }) => {
     const [loading, setloading] = useState(false);
-    const [boxOpen, setboxopen] = useState(false)
-    const [sumarizedText, setSumarizedText] = useState(null)
+    const [boxOpen, setboxopen] = useState(false);
+    const [sumarizedText, setSumarizedText] = useState(null);
+
+    const [file, setFile] = useState(null);
+    console.log(file)
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile && selectedFile.type === "application/pdf") {
+            setFile(selectedFile);
+            console.log('File uploaded:', selectedFile.name);
+        } else {
+            alert('Please select a valid PDF file');
+        }
+    };
+    const triggerFileInput = () => {
+        document.getElementById('pdfInput').click();
+    };
 
   return (
       <div className={'w-[85%] h-[90%]  flex text-black bg-w gap-4 transition-all'}>
@@ -22,8 +37,15 @@ const Inputpanel = ({ mode, setmode }) => {
               }
               {
                   (mode === 'pdf') && <div className=" flex-1  p-3">
-                      <button className="hover:cursor-pointer absolute top-1/2 text-gray-400 w-full text-center text-sm">Click to upload PDF...</button>
-                      <button autoFocus className='text-sm bg-gray-50 pt-3 border border-dashed border-slate-400 w-full h-[90%]  pl-5 focus:outline-none  focus:border-nonee focus:ring-0 hover:cursor-pointer' name="" id=""></button>
+                      <input
+                          type="file"
+                          id="pdfInput"
+                          accept=".pdf"
+                          style={{ display: 'none' }}
+                          onChange={handleFileChange}
+                      />
+                      <button onClick={triggerFileInput} className="hover:cursor-pointer absolute top-1/2 text-gray-400 w-full text-center text-sm">{file ? file.name : "Click to upload PDF..."}</button>
+                      <button onClick={triggerFileInput} autoFocus className='text-sm bg-gray-50 pt-3 border border-dashed border-slate-400 w-full h-[90%]  pl-5 focus:outline-none  focus:border-nonee focus:ring-0 hover:cursor-pointer' name="" id=""></button>
                   </div>
 
               }
@@ -51,7 +73,7 @@ const Inputpanel = ({ mode, setmode }) => {
               }
               {!sumarizedText && !loading &&
                   <div className=" w-full h-full top-0 left-0 absolute flex items-center justify-center flex-col gap-4 bg-white">
-                      <img className='animate-pulse' src='/logo.png' width={80} alt="" />
+                      <img className='animate-pulse' src='/logo.png' width={60} alt="" />
                   </div>
 
               }
