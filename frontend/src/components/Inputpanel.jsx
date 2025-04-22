@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FaCopy } from "react-icons/fa";
 // import logo from '/logo.png';
 // import {  } from 'react';
@@ -9,6 +9,8 @@ const Inputpanel = ({ mode, setmode }) => {
     const fileInputRef = useRef();
     const [extractedtext, setText] = useState(null);
     const [filename, setFile] = useState(null);
+    const [lenghtExceeded, setExceeded] = useState(false);
+    const [inputText, setinputtext] = useState('');
 
     const handleButtonClick = () => {
         fileInputRef.current.click();
@@ -16,6 +18,12 @@ const Inputpanel = ({ mode, setmode }) => {
 
     const handleUpload = async (e) => {
         const file = e.target.files[0];
+        const fileSizeMB = file.size / (1024 * 1024);
+        if (file && fileSizeMB > 1) {
+            alert(`File is too large. Max size is 1 MB.`);
+            document.getElementsByTagName('textarea').value = '';
+            return;
+        }
         if (!file) return;
         setFile(file.name)
         setLoading(true);
@@ -40,12 +48,28 @@ const Inputpanel = ({ mode, setmode }) => {
 
 
         if (data.text) {
+            setinputtext(data.text);
             document.getElementsByTagName('textarea').value = data.text;
-            setText(data.text);
         }
-        else alert(data.error || 'Something went wrong');
-        console.log(extractedtext)
+        else {
+            alert(data.error || 'Something went wrong with pdf text extraction.');
+            document.getElementsByTagName('textarea').value = '';
+        };
     };
+
+    const handleChange = (e) => {
+        setinputtext(e.target.value);
+
+    };
+    useEffect(() => {
+        if (inputText.replace(/[^\w\s]/g, '').trim().split(/\s+/).filter(Boolean).length > 60) {
+            setExceeded(true);
+        } else {
+            setExceeded(false)
+        }
+
+    }, [inputText])
+
 
   return (
       <div className={'w-[85%] h-[90%]  flex text-black bg-w gap-4 transition-all'}>
@@ -56,10 +80,11 @@ const Inputpanel = ({ mode, setmode }) => {
               </div>
               {
                   (mode === 'text') && <div className=" flex-1  p-3">
-                      <span className={" absolute top-1/2 text-gray-400 w-full text-center text-sm" + (extractedtext ? ' hidden ' : ' ')}>Paste your text here...</span>
-                      <textarea defaultValue={extractedtext ? extractedtext : ''} className='text-sm pt-3 border border-dashed border-slate-400 w-full h-[90%]  pl-5 focus:outline-none  focus:border-nonee focus:ring-0' name="" id=""></textarea>
+                      <span className={" absolute top-1/2 text-gray-400 w-full text-center text-sm" + (inputText ? ' hidden ' : ' ')}>Paste your text here...</span>
+                      <textarea onChange={handleChange} defaultValue={inputText ? inputText : ''} className='text-sm pt-3 border border-dashed border-slate-400 w-full h-[90%]  pl-5 focus:outline-none  focus:border-nonee focus:ring-0' name="" id=""></textarea>
                   </div>
               }
+
               {
                   (mode === 'pdf') && <div className=" flex-1  p-3">
                       <input
@@ -69,6 +94,7 @@ const Inputpanel = ({ mode, setmode }) => {
                           style={{ display: 'none' }}
                           onChange={handleUpload}
                           ref={fileInputRef}
+
                       />
                       <button onClick={handleButtonClick} className="hover:cursor-pointer absolute top-1/2 text-gray-400 w-full text-center text-sm">{filename ? filename : "Click to upload PDF..."}</button>
                       <button onClick={handleButtonClick} autoFocus className='text-sm bg-gray-50 pt-3 border border-dashed border-slate-400 w-full h-[90%]  pl-5 focus:outline-none  focus:border-nonee focus:ring-0 hover:cursor-pointer' name="" id=""></button>
@@ -76,9 +102,9 @@ const Inputpanel = ({ mode, setmode }) => {
 
               }
 
-
-              <div className="hover:scale-105 transition-all  bg-gradient-to-r from-blue-400 right-7 absolute  to-blue-800 p-1 rounded-md bottom-3 w-fit h-fit">
-                  <button onClick={() => { setLoading(!loading); console.log(extractedtext) }} className=' hover:cursor-pointer hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-800 hover:text-white  text-blue-500 font-bold  px-3 py-1 rounded-sm bg-white '>Summarize</button>
+              <span className='absolute left-2 bottom-3 text-sm text-slate-400'>{lenghtExceeded ? 'Text limit exceeded (60 words)' : ''}</span>
+              <div className="hover:scale-105   bg-gradient-to-r from-blue-400 right-7 absolute  to-blue-800 p-1 rounded-md bottom-3 w-fit h-fit">
+                  <button onClick={() => { setLoading(!loading); console.log(inputText) }} className=' hover:cursor-pointer hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-800 hover:text-white  text-blue-500 font-bold  px-3 py-1 rounded-sm bg-white '>Summarize</button>
               </div>
           </div>
           <div className={"w-1/2 transition-all overflow-clip duration-500 border relative pb-10 border-slate-300 h-full shadow-2xl rounded-md bg-white p-5 flex flex-col"}>
