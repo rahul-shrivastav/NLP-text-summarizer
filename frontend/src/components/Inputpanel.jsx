@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FaCopy } from "react-icons/fa";
 // import logo from '/logo.png';
+import Typewriter from './Typewriter';
 // import {  } from 'react';
 
 const Inputpanel = ({ mode, setmode }) => {
     const [loading, setLoading] = useState(false);
-    const [sumarizedText, setSumarizedText] = useState(null);
+    const [sumarizedText, setSumarizedText] = useState('');
     const fileInputRef = useRef();
-    const [extractedtext, setText] = useState(null);
     const [filename, setFile] = useState(null);
     const [lenghtExceeded, setExceeded] = useState(false);
     const [inputText, setinputtext] = useState('');
+    const [pdfLoading, setpdfLoading] = useState(false);
 
     const handleButtonClick = () => {
         fileInputRef.current.click();
@@ -26,7 +27,7 @@ const Inputpanel = ({ mode, setmode }) => {
         }
         if (!file) return;
         setFile(file.name)
-        setLoading(true);
+        setpdfLoading(true);
         setmode('text')
 
         const arrayBuffer = await file.arrayBuffer();
@@ -44,9 +45,10 @@ const Inputpanel = ({ mode, setmode }) => {
         });
 
         const data = await res.json();
-        setLoading(false);
 
 
+
+        setpdfLoading(false);
         if (data.text) {
             setinputtext(data.text);
             document.getElementsByTagName('textarea').value = data.text;
@@ -72,16 +74,19 @@ const Inputpanel = ({ mode, setmode }) => {
 
 
   return (
-      <div className={'w-[85%] h-[90%]  flex text-black bg-w gap-4 transition-all'}>
-          <div className="w-1/2 duration-1000 h-full shadow-2xl rounded-md  flex flex-col relative bg-white border border-slate-300">
+      <div className={'w-[85%] h-[90%]  flex text-black bg-w gap-4 transition-all '}>
+          <div className="w-1/2 duration-1000 h-full shadow-2xl rounded-md   flex flex-col relative bg-white border border-slate-300">
               <div className=" mt-5 ml-5  ">
                   <button onClick={() => setmode('text')} className={mode === 'pdf' ? 'bg-blue-50  text-blue-400 hover:cursor-pointer px-5 py-1 font-semibold rounded-sm ' : 'bg-blue-800  text-white hover:cursor-pointer px-5 py-1 font-semibold rounded-sm '}>Text</button>
                   <button onClick={() => setmode('pdf')} className={mode === 'text' ? 'bg-blue-50  text-blue-400 hover:cursor-pointer px-5 py-1 font-semibold rounded-sm ' : 'bg-blue-800  text-white hover:cursor-pointer px-5 py-1 font-semibold rounded-sm '}>PDF</button>
               </div>
               {
-                  (mode === 'text') && <div className=" flex-1  p-3">
+                  (mode === 'text') && <div className=" flex-1 p-3 ">
+                      {/* <div className=""></div> */}
                       <span className={" absolute top-1/2 text-gray-400 w-full text-center text-sm" + (inputText ? ' hidden ' : ' ')}>Paste your text here...</span>
-                      <textarea onChange={handleChange} defaultValue={inputText ? inputText : ''} className='text-sm pt-3 border border-dashed border-slate-400 w-full h-[90%]  pl-5 focus:outline-none  focus:border-nonee focus:ring-0' name="" id=""></textarea>
+                      <textarea onChange={handleChange} defaultValue={inputText ? inputText : ''} className='z-0 text-sm pt-3 border border-dashed border-slate-400 w-full h-[90%]  pl-5 focus:outline-none  focus:border-nonee focus:ring-0' name="" id="">
+
+                      </textarea>
                   </div>
               }
 
@@ -104,15 +109,26 @@ const Inputpanel = ({ mode, setmode }) => {
 
               <span className='absolute left-2 bottom-3 text-sm text-slate-400'>{lenghtExceeded ? 'Text limit exceeded (60 words)' : ''}</span>
               <div className="hover:scale-105   bg-gradient-to-r from-blue-400 right-7 absolute  to-blue-800 p-1 rounded-md bottom-3 w-fit h-fit">
-                  <button onClick={() => { setLoading(!loading); console.log(inputText) }} className=' hover:cursor-pointer hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-800 hover:text-white  text-blue-500 font-bold  px-3 py-1 rounded-sm bg-white '>Summarize</button>
+                  <button disabled={pdfLoading ? true : false} onClick={() => { setLoading(!loading); console.log(inputText); setSumarizedText('If youre trying to add ellipsis for multi-line truncation (e.g., only showing 3 lines of text and cutting off after), you can use custom Tailwind plugins (like line-clamp):'.repeat(10)) }} className=' disabled:cursor-not-allowed hover:cursor-pointer hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-800 hover:text-white  text-blue-500 font-bold  px-3 py-1 rounded-sm bg-white '>Summarize</button>
               </div>
           </div>
           <div className={"w-1/2 transition-all overflow-clip duration-500 border relative pb-10 border-slate-300 h-full shadow-2xl rounded-md bg-white p-5 flex flex-col"}>
-              <div className="text-md text-blue-500 font-bold  text-center p-5  flex items-center justify-center ">Summarized text  </div>
-              <div className="text-sm font-extralight overflow-y-scroll  text-black h-[90%]  text-center p-3   border-dotted border border-slate-500">
-                  {sumarizedText}
+              {/* <div className="text-md text-blue-500 font-bold  text-center p-2  flex items-center justify-center ">Summarized text  </div> */}
+
+              <div className=" flex items-center justify-center bg-white text-blue-900">
+                  <img className='animate-pulse' src='/logo.png' width={45} alt="" />
               </div>
-              <button className=" text-xl text-gray-700 absolute bottom-3 right-3 hover:cursor-pointer">
+
+              <div className="text-sm font-extralight overflow-y-scroll flex flex-col items-start justify-start  text-black h-[90%]  text-center p-3   border-dotted border border-slate-500">
+                  <div className="w-full text-blue-600 font-bold ">Summary</div>
+                  <div className="w-fit flex-1  w-max-[100%] p-2 flex items-start justify-around ">
+                      <div className=" w-fit text-left">
+                          <Typewriter text={sumarizedText} speed={20} />
+                      </div>
+                  </div>
+
+              </div>
+              <button className=" text-md text-gray-700 absolute bottom-4 right-4 hover:cursor-pointer">
                   <FaCopy />
 
               </button>
