@@ -8,7 +8,6 @@ const Inputpanel = ({ mode, setmode }) => {
     const [sumarizedText, setSumarizedText] = useState(null);
     const fileInputRef = useRef();
     const [extractedtext, setText] = useState(null);
-
     const [filename, setFile] = useState(null);
 
     const handleButtonClick = () => {
@@ -19,8 +18,8 @@ const Inputpanel = ({ mode, setmode }) => {
         const file = e.target.files[0];
         if (!file) return;
         setFile(file.name)
-
         setLoading(true);
+        setmode('text')
 
         const arrayBuffer = await file.arrayBuffer();
         const base64 = btoa(
@@ -39,7 +38,11 @@ const Inputpanel = ({ mode, setmode }) => {
         const data = await res.json();
         setLoading(false);
 
-        if (data.text) setText(data.text);
+
+        if (data.text) {
+            document.getElementsByTagName('textarea').value = data.text;
+            setText(data.text);
+        }
         else alert(data.error || 'Something went wrong');
         console.log(extractedtext)
     };
@@ -53,8 +56,8 @@ const Inputpanel = ({ mode, setmode }) => {
               </div>
               {
                   (mode === 'text') && <div className=" flex-1  p-3">
-                      <span className=" absolute top-1/2 text-gray-400 w-full text-center text-sm">Paste your text here...</span>
-                      <textarea autoFocus className='text-sm pt-3 border border-dashed border-slate-400 w-full h-[90%]  pl-5 focus:outline-none  focus:border-nonee focus:ring-0' name="" id=""></textarea>
+                      <span className={" absolute top-1/2 text-gray-400 w-full text-center text-sm" + (extractedtext ? ' hidden ' : ' ')}>Paste your text here...</span>
+                      <textarea defaultValue={extractedtext ? extractedtext : ''} className='text-sm pt-3 border border-dashed border-slate-400 w-full h-[90%]  pl-5 focus:outline-none  focus:border-nonee focus:ring-0' name="" id=""></textarea>
                   </div>
               }
               {
@@ -67,7 +70,7 @@ const Inputpanel = ({ mode, setmode }) => {
                           onChange={handleUpload}
                           ref={fileInputRef}
                       />
-                      <button onClick={handleButtonClick} className="hover:cursor-pointer absolute top-1/2 text-gray-400 w-full text-center text-sm">{file ? file.name : "Click to upload PDF..."}</button>
+                      <button onClick={handleButtonClick} className="hover:cursor-pointer absolute top-1/2 text-gray-400 w-full text-center text-sm">{filename ? filename : "Click to upload PDF..."}</button>
                       <button onClick={handleButtonClick} autoFocus className='text-sm bg-gray-50 pt-3 border border-dashed border-slate-400 w-full h-[90%]  pl-5 focus:outline-none  focus:border-nonee focus:ring-0 hover:cursor-pointer' name="" id=""></button>
                   </div>
 
