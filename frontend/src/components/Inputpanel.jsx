@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FaCopy } from "react-icons/fa";
-// import logo from '/logo.png';
 import Typewriter from './Typewriter';
-// import {  } from 'react';
 
 const Inputpanel = ({ mode, setmode }) => {
     const [loading, setLoading] = useState(false);
@@ -63,6 +61,7 @@ const Inputpanel = ({ mode, setmode }) => {
         setinputtext(e.target.value);
 
     };
+
     useEffect(() => {
         if (inputText.replace(/[^\w\s]/g, '').trim().split(/\s+/).filter(Boolean).length > 60) {
             setExceeded(true);
@@ -71,7 +70,6 @@ const Inputpanel = ({ mode, setmode }) => {
         }
 
     }, [inputText])
-
 
   return (
       <div className={'w-[85%] h-[90%]  flex text-black bg-w gap-4 transition-all '}>
@@ -146,9 +144,6 @@ const Inputpanel = ({ mode, setmode }) => {
 
               }
           </div>
-
-
-        
       </div>
   )
 }
