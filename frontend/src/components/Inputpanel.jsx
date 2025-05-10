@@ -11,6 +11,16 @@ const Inputpanel = ({ mode, setmode }) => {
     const [inputText, setinputtext] = useState('');
     const [pdfLoading, setpdfLoading] = useState(false);
 
+    const handleSummarizeButton = () => {
+        setLoading(true)
+        // setSumarizedText('')
+        setTimeout(() => {
+            setSumarizedText(() => { return 'The free-tier server is not capable to host the backend with model as it exceeds the limited resources. Please try cloning the repo and runnning the app locally.' })
+            setLoading(false);
+
+        }, 1000);
+
+    }
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
@@ -107,7 +117,7 @@ const Inputpanel = ({ mode, setmode }) => {
 
               <span className='absolute left-2 bottom-3 text-sm text-slate-400'>{lenghtExceeded ? 'Text limit exceeded (60 words)' : ''}</span>
               <div className="hover:scale-105   bg-gradient-to-r from-blue-400 right-7 absolute  to-blue-800 p-1 rounded-md bottom-3 w-fit h-fit">
-                  <button disabled={pdfLoading ? true : false} onClick={() => { setLoading(!loading); console.log(inputText); setSumarizedText('If youre trying to add ellipsis for multi-line truncation (e.g., only showing 3 lines of text and cutting off after), you can use custom Tailwind plugins (like line-clamp):'.repeat(10)) }} className=' disabled:cursor-not-allowed hover:cursor-pointer hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-800 hover:text-white  text-blue-500 font-bold  px-3 py-1 rounded-sm bg-white '>Summarize</button>
+                  <button disabled={pdfLoading | loading ? true : false} onClick={handleSummarizeButton} className=' disabled:cursor-not-allowed hover:cursor-pointer hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-800 hover:text-white  text-blue-500 font-bold  px-3 py-1 rounded-sm bg-white '>Summarize</button>
               </div>
           </div>
           <div className={"w-1/2 transition-all overflow-clip duration-500 border relative pb-10 border-slate-300 h-full shadow-2xl rounded-md bg-white p-5 flex flex-col"}>
@@ -121,7 +131,7 @@ const Inputpanel = ({ mode, setmode }) => {
                   <div className="w-full text-blue-600 font-bold ">Summary</div>
                   <div className="w-fit flex-1  w-max-[100%] p-2 flex items-start justify-around ">
                       <div className=" w-fit text-left">
-                          <Typewriter text={sumarizedText} speed={20} />
+                          <Typewriter text={sumarizedText ? sumarizedText : ''} speed={20} />
                       </div>
                   </div>
 
