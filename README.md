@@ -12,7 +12,7 @@
 
 A web application that summarizes long text passages using an LSTM-based neural network. Built with TensorFlow on the backend and powered by a modern UI using Next.js and Tailwind CSS. The API layer is handled by Flask, allowing real-time summarization of user input.
 
-[![VISIT](https://img.shields.io/badge/-VISIT-blue?style=for-the-badge)](https://recommendation-system-steel.vercel.app/)
+[![VISIT](https://img.shields.io/badge/-VISIT-blue?style=for-the-badge)](https://nlp-project-ten.vercel.app/)
 
 ## Tech Stack
 - ` Python ` : versatile, high-level, interpreted, easy-to-learn programming language.
