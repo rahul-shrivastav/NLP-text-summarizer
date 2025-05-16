@@ -1,46 +1,24 @@
-from flask import Flask, request, jsonify, send_from_directory
-from flask_cors import CORS  # Import CORS
+from flask import Flask, request, jsonify
+from flask_cors import CORS  
+from model import Model
 import os
 
+
 app = Flask(__name__)
+prediction_model = Model()
 
-# Enable CORS for all routes
-CORS(app)
+CORS(app)  
 
-# Directory to store uploaded PDFs
-UPLOAD_FOLDER = 'uploads'
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+@app.route('/predict',methods=['POST'])
+def predict():
+    json_data = request.get_json()
+    inp_text = json_data.get('inp_text') if json_data else None
 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['ALLOWED_EXTENSIONS'] = {'pdf'}
+    if not inp_text : return jsonify({'message': 'Error'})
 
-# Check if the file extension is allowed
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
-# Route to upload PDF
-@app.route('/upload', methods=['POST'])
-def upload_pdf():
-    if 'file' not in request.files:
-        return jsonify({"message": "No file part"}), 400
-    file = request.files['file']
-    
-    if file.filename == '':
-        return jsonify({"message": "No selected file"}), 400
-    
-    if file and allowed_file(file.filename):
-        filename = file.filename
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        return jsonify({"message": "File uploaded successfully", "file_path": file_path}), 200
-    else:
-        return jsonify({"message": "Invalid file format. Only PDF files are allowed."}), 400
 
-# Route to serve the uploaded PDF
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    return jsonify({'prediction': prediction_model.predict(inp_text)})
 
 if __name__ == '__main__':
     app.run(debug=True)
