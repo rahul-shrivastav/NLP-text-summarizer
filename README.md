@@ -45,7 +45,7 @@ npm install
 
 To run this project, you will need to add the following environment variables to your .env file in frontend
 ```bash
-VITE_API
+NEXT_PUBLIC_API_URL
 ```
 A sample .evn file is also provided in the repository.
 
