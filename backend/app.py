@@ -15,6 +15,7 @@ def predict():
     inp_text = json_data.get('inp_text') if json_data else None
 
     if not inp_text : return jsonify({'message': 'Error'})
+    print(inp_text)
 
 
 

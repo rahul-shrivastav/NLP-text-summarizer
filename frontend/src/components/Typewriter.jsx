@@ -19,7 +19,6 @@ const Typewriter = ({ text, speed = 40 }) => {
   return (
     <div className="">
       {displayedText}
- 
     </div>
   );
 };

@@ -13,14 +13,40 @@ const Inputpanel = ({ mode, setmode }) => {
 
     const handleSummarizeButton = () => {
         setLoading(true)
-        // setSumarizedText('')
+        setSumarizedText('')
         setTimeout(() => {
             setSumarizedText(() => { return 'The free-tier server is not capable to host the backend with model as it exceeds the limited resources. Please try cloning the repo and runnning the app locally.' })
             setLoading(false);
-
         }, 1000);
-
     }
+    const handleAPISubmit = async (e) => {
+        e.preventDefault();
+        setSumarizedText('')
+        setLoading(true)
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/predict`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 'inp_text': inputText }),
+            });
+
+            const data = await res.json();
+
+            setSumarizedText(data.prediction);
+            setLoading(false)
+        } catch (error) {
+            setSumarizedText('Try again. Something went wrong on backend.')
+            setLoading(false)
+            console.error('Error:', error);
+        }
+    };
+
+
+
+
+
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
@@ -117,7 +143,7 @@ const Inputpanel = ({ mode, setmode }) => {
 
               <span className='absolute left-2 bottom-3 text-sm text-slate-400'>{lenghtExceeded ? 'Text limit exceeded (60 words)' : ''}</span>
               <div className="hover:scale-105   bg-gradient-to-r from-blue-400 right-7 absolute  to-blue-800 p-1 rounded-md bottom-3 w-fit h-fit">
-                  <button disabled={pdfLoading | loading ? true : false} onClick={handleSummarizeButton} className=' disabled:cursor-not-allowed hover:cursor-pointer hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-800 hover:text-white  text-blue-500 font-bold  px-3 py-1 rounded-sm bg-white '>Summarize</button>
+                  <button disabled={pdfLoading | loading ? true : false} onClick={handleAPISubmit} className=' disabled:cursor-not-allowed hover:cursor-pointer hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-800 hover:text-white  text-blue-500 font-bold  px-3 py-1 rounded-sm bg-white '>Summarize</button>
               </div>
           </div>
           <div className={"w-1/2 transition-all overflow-clip duration-500 border relative pb-10 border-slate-300 h-full shadow-2xl rounded-md bg-white p-5 flex flex-col"}>
@@ -130,8 +156,8 @@ const Inputpanel = ({ mode, setmode }) => {
               <div className="text-sm font-extralight overflow-y-scroll flex flex-col items-start justify-start  text-black h-[90%]  text-center p-3   border-dotted border border-slate-500">
                   <div className="w-full text-blue-600 font-bold ">Summary</div>
                   <div className="w-fit flex-1  w-max-[100%] p-2 flex items-start justify-around ">
-                      <div className=" w-fit text-left">
-                          <Typewriter text={sumarizedText ? sumarizedText : ''} speed={20} />
+                      <div id='typewriter' className=" w-fit text-left">
+                          {sumarizedText && <Typewriter text={sumarizedText} speed={20} />}
                       </div>
                   </div>
 
