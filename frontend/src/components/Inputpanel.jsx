@@ -37,7 +37,7 @@ const Inputpanel = ({ mode, setmode }) => {
             setSumarizedText(data.prediction);
             setLoading(false)
         } catch (error) {
-            setSumarizedText('Try again. Something went wrong on backend.')
+            setSumarizedText('The free-tier server is not capable to host the backend with model as it exceeds the limited resources. Please try cloning the repo and runnning the app locally.')
             setLoading(false)
             console.error('Error:', error);
         }
