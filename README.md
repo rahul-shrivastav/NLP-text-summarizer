@@ -61,7 +61,7 @@ Now navigate to `/frontend` and run the development frontend server :
 ```bash
 npm run dev
 ```
-Open port `5173` on `localhost` with your browser to see the result. 
+Open port `3000` on `localhost` with your browser to see the result. 
 
 
 
