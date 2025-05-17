@@ -45,7 +45,7 @@ npm install
 
 To run this project, you will need to add the following environment variables to your .env file in frontend
 ```bash
-NEXT_PUBLIC_API_URL
+NEXT_PUBLIC_API_URL=http://127.0.0.1:5000
 ```
 A sample .evn file is also provided in the repository.
 
